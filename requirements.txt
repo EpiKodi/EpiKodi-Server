@@ -6,3 +6,4 @@ Flask-Restful
 Psycopg2
 gunicorn
 cryptography
+PyJWT

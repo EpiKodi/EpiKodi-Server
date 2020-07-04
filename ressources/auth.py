@@ -1,7 +1,8 @@
-import sys
 from flask_restful import Resource, reqparse, fields, marshal
 from models import User, db
 from common.crypto import encode, decode
+import jwt
+import os
 
 user_fields = {
     'id': fields.Integer,
@@ -34,7 +35,7 @@ class Register(Resource):
         db.session.commit()
         return marshal(user, user_fields)
 
-
+import sys
 class Login(Resource):
     def __init__(self):
         self.post_parser = reqparse.RequestParser()
@@ -55,7 +56,7 @@ class Login(Resource):
         user = User.query.filter_by(username=args['username']).first()
         if user is None:
             return {'message': 'wrong username / password combinaison'}, 400
-        print("here", file=sys.stderr)
         if decode(user.password) != args['password']:
             return {'message': 'wrong username / password combinaison'}, 400
-        return marshal(user, user_fields)
+        encoded = jwt.encode({'id': user.id}, os.environ['SECRET'], algorithm='HS256')
+        return {'token': encoded.decode('utf-8') }
