@@ -2,4 +2,4 @@ __pycache__
 start.sh
 stop.sh
 connect_psql.sh
-migrations
+db_manager.sh
