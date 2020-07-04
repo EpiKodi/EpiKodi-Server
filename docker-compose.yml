@@ -6,7 +6,7 @@ services:
       - postgres
     environment:
       - DATABASE_URL=postgres://user:pass@postgres:5432/db
-      - DEBUG=True
+      - DEBUG=1
       - KEY=Gj7eXAMLBlq6FMS6ganX0OMVX2AweeWvWdlKh0yFErU=
       - SECRET=Wu6bt7LssNi8W7S$J4imJaVB!t)QmHhyi4!Na4Y^
     ports:

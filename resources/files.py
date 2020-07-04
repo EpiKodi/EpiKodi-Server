@@ -20,7 +20,7 @@ class Upload(Resource):
             return {'message': 'Required field file'}, 400
         file = request.files['file']
         if file.filename == '':
-            return {'message', 'Required field file'}, 400
+            return {'message', 'file is empty'}, 400
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
         file.save(FILE_DIR + secure_filename(file.filename))

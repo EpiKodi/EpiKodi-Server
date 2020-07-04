@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api
+from flask_cors import CORS
 from resources.auth import Register, Login
 from resources.files import Upload
 from models import db
@@ -8,6 +9,7 @@ import os
 
 # Flask config
 app = Flask(__name__)
+CORS(app)
 app.config['DEBUG'] = os.environ.get('DEBUG')
 app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/files'
 

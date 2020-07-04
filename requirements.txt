@@ -3,6 +3,7 @@ Flask-Script
 Flask-SQLAlchemy
 Flask-Migrate
 Flask-Restful
+Flask_Cors
 Psycopg2
 gunicorn
 cryptography

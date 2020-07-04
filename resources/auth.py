@@ -35,7 +35,7 @@ class Register(Resource):
         db.session.commit()
         return marshal(user, user_fields)
 
-import sys
+
 class Login(Resource):
     def __init__(self):
         self.post_parser = reqparse.RequestParser()
@@ -59,4 +59,4 @@ class Login(Resource):
         if decode(user.password) != args['password']:
             return {'message': 'wrong username / password combinaison'}, 400
         encoded = jwt.encode({'id': user.id}, os.environ['SECRET'], algorithm='HS256')
-        return {'token': encoded.decode('utf-8') }
+        return {'token': encoded.decode('utf-8')}
