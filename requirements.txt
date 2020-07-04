@@ -2,5 +2,8 @@ Flask
 Flask-Script
 Flask-SQLAlchemy
 Flask-Migrate
+Flask-Restful
 Psycopg2
 gunicorn
+cryptography
+PyJWT
