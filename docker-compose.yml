@@ -6,6 +6,7 @@ services:
       - postgres
     environment:
       - DATABASE_URL=postgres://user:pass@postgres:5432/db
+      - DEBUG=True
     ports:
       - "5000:5000"
     command: ["python", "app.py"]
