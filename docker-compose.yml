@@ -7,6 +7,7 @@ services:
     environment:
       - DATABASE_URL=postgres://user:pass@postgres:5432/db
       - DEBUG=True
+      - KEY=Gj7eXAMLBlq6FMS6ganX0OMVX2AweeWvWdlKh0yFErU=
     ports:
       - "5000:5000"
     command: ["python", "app.py"]

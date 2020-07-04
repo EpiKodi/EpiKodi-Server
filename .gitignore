@@ -3,3 +3,4 @@ start.sh
 stop.sh
 connect_psql.sh
 db_manager.sh
+generate_key.py

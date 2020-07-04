@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api
 from ressources.auth import Register, Login
 from models import db
+from cryptography.fernet import Fernet
 import os
 
 # Flask config
