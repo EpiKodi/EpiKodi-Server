@@ -1,0 +1,22 @@
+version: "3"
+services:
+  server:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://user:pass@postgres:5432/db
+    ports:
+      - "5000:5000"
+    command: ["python", "launch.py"]
+    restart: on-failure
+    volumes:
+      - "./:/home/app"
+  postgres:
+    image: postgres:10
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=db
+    ports:
+      - "8081:5432"
