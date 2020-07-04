@@ -1,6 +1,7 @@
 from flask import request
 from flask_restful import Resource, reqparse, fields, marshal
 from werkzeug.utils import secure_filename
+from common.auth import authenticate
 import os
 
 import sys
@@ -13,7 +14,9 @@ def allowed_file(filename: str) -> bool:
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 class Upload(Resource):
-    def post(self):
+    method_decorators = [authenticate]
+    def post(self, user):
+        print(user, file=sys.stderr)
         if 'file' not in request.files:
             return {'message': 'Required field file'}, 400
         file = request.files['file']
