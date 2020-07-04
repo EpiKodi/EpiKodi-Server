@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input id=file type=file name=file>
+  <button value=Upload onclick=upload()>Upload</button>
+</body>
+
+</html>
+
+<script>
+  function upload() {
+    var input = document.querySelector('#file')
+    let formData = new FormData();
+    formData.append('file', input.files[0])
+    fetch('http://localhost:5000/file/upload', {
+      method: 'POST',
+      headers: {
+        // token valide for user "a"
+        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.WFEJuxsuHTKq9WR6VAA25oawXuILNt5k6eMLYWo9zvs',
+        // DO NOT SET CONTENT TYPE
+      },
+      body: formData
+    }).then(response => response.json())
+      .then(data => {
+        console.log(data)
+      })
+  }
+</script>
