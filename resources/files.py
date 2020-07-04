@@ -16,7 +16,6 @@ def allowed_file(filename: str) -> bool:
 class Upload(Resource):
     method_decorators = [authenticate]
     def post(self, user):
-        print(user, file=sys.stderr)
         if 'file' not in request.files:
             return {'message': 'Required field file'}, 400
         file = request.files['file']
