@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api
-from ressources.auth.register import Register
+from ressources.auth import Register, Login
 from models import db
 import os
 
@@ -16,6 +16,7 @@ db.init_app(app)
 # API config
 api = Api(app)
 api.add_resource(Register, '/auth/register')
+api.add_resource(Login, '/auth/login')
 api.init_app(app)
 
 if __name__ == "__main__":
