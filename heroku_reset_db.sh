@@ -1,1 +1,0 @@
-heroku pg:reset DATABASE -a epi-kodi --confirm epi-kodi
