@@ -26,8 +26,8 @@ class File(Resource):
             return {'message', 'file is empty'}, 400
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
-        file.save(FILE_DIR + secure_filename(file.filename))
-        print(FILE_DIR + secure_filename(file.filename), file=sys.stderr)
+        file.save("/app/" + FILE_DIR + secure_filename(file.filename))
+        print("/app/" + FILE_DIR + secure_filename(file.filename), file=sys.stderr)
         return {}
     
     # Get
