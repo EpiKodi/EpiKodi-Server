@@ -8,6 +8,7 @@ import sys
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp4', 'mp3'}
 FILE_DIR = "files/"
+SAVE_DIR = os.path.join(os.path.dirname(__file__) + '/../' + FILE_DIR)
 
 def allowed_file(filename: str) -> bool:
     return '.' in filename and \
@@ -26,8 +27,8 @@ class File(Resource):
             return {'message', 'file is empty'}, 400
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
-        file.save("/app/" + FILE_DIR + secure_filename(file.filename))
-        print("/app/" + FILE_DIR + secure_filename(file.filename), file=sys.stderr)
+        file.save(SAVE_DIR + secure_filename(file.filename))
+        print(SAVE_DIR + secure_filename(file.filename), file=sys.stderr)
         return {}
     
     # Get
