@@ -7,8 +7,7 @@ import os
 import sys
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp4', 'mp3'}
-FILE_DIR = "files/"
-SAVE_DIR = os.path.join(os.path.dirname(__file__) + '/../' + FILE_DIR)
+SAVE_DIR = "files/"
 
 def allowed_file(filename: str) -> bool:
     return '.' in filename and \
