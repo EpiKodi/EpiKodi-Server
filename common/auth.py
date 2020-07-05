@@ -5,11 +5,11 @@ from models import User
 import jwt
 import os
 
-import sys
-
 def authenticate(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
+        if request.headers.get('Authorization') is None:
+            abort(401)
         token = request.headers['Authorization'].split(',')[0]
         try:
             jwt_token = jwt.decode(token, os.environ['SECRET'], algorithms=['HS256'])
