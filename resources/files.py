@@ -34,3 +34,9 @@ class File(Resource):
     # Get
     def get(self, user):
         return {}
+
+import glob
+
+class List(Resource):
+    def get(self):
+        return {'files': glob.glob(SAVE_DIR + '*')}

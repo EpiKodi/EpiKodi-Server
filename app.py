@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from resources.auth import Register, Login
-from resources.files import File
+from resources.files import File, List
 from models import db
 from cryptography.fernet import Fernet
 import os
@@ -24,6 +24,7 @@ api.init_app(app)
 api.add_resource(Register, '/auth/register')
 api.add_resource(Login, '/auth/login')
 api.add_resource(File, '/file')
+api.add_resource(List, '/list')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
