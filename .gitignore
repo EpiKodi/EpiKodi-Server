@@ -6,5 +6,4 @@ db_manager.sh
 generate_key.py
 dev
 heroku_reset_db.sh
-files/*
 connect_heroku.sh
