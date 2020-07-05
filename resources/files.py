@@ -27,6 +27,7 @@ class File(Resource):
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
         file.save(FILE_DIR + secure_filename(file.filename))
+        print(FILE_DIR + secure_filename(file.filename), file=sys.stderr)
         return {}
     
     # Get
