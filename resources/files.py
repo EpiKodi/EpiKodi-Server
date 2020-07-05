@@ -6,7 +6,7 @@ import os
 
 import sys
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'mp4', 'mp3'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp4', 'mp3'}
 FILE_DIR = "files/"
 
 def allowed_file(filename: str) -> bool:
