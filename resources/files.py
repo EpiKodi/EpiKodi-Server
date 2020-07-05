@@ -13,8 +13,11 @@ def allowed_file(filename: str) -> bool:
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-class Upload(Resource):
+class File(Resource):
+    # Protected endpoint
     method_decorators = [authenticate]
+
+    # Upload
     def post(self, user):
         if 'file' not in request.files:
             return {'message': 'Required field file'}, 400
@@ -24,4 +27,8 @@ class Upload(Resource):
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
         file.save(FILE_DIR + secure_filename(file.filename))
+        return {}
+    
+    # Get
+    def get(self, user):
         return {}
