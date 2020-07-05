@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Blueprint
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from resources.auth import Register, Login
@@ -25,6 +25,10 @@ api.add_resource(Register, '/auth/register')
 api.add_resource(Login, '/auth/login')
 api.add_resource(File, '/file')
 api.add_resource(List, '/list')
+
+# Static config
+blueprint = Blueprint('site', __name__, static_folder='files')
+app.register_blueprint(blueprint)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
