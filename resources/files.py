@@ -7,11 +7,11 @@ import os
 import sys
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp4', 'mp3'}
-SAVE_DIR = "files/"
+FILE_DIR = "files/"
+SAVE_DIR = os.path.join(os.path.dirname(__file__) + '/../' + FILE_DIR)
 
 def allowed_file(filename: str) -> bool:
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 class File(Resource):
     # Protected endpoint
@@ -27,7 +27,6 @@ class File(Resource):
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
         file.save(SAVE_DIR + secure_filename(file.filename))
-        print(SAVE_DIR + secure_filename(file.filename), file=sys.stderr)
         return {}
     
     # Get
