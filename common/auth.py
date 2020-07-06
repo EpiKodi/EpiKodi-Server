@@ -5,6 +5,8 @@ from models import User
 import jwt
 import os
 
+import sys
+
 def authenticate(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
@@ -18,5 +20,6 @@ def authenticate(function):
         user = User.query.filter_by(id=jwt_token['id']).first()
         if user is None:
             abort(401)
-        return function(user)
+        kwargs['user'] = user
+        return function(**kwargs)
     return wrapper

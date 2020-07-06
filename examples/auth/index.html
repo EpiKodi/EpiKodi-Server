@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    Create Account
+    <br />
+    <input id=createUsername placeholder="username">
+    <input id=createPassword type=password placeholder="password">
+    <button id=ceateSubmit onclick="create()">Create account</button>
+    <br />
+    <textarea id=createResponse cols="40" rows="5" placeholder="request response"></textarea>
+  </div>
+  <br />
+  <div>
+    Loggin
+    <br />
+    <input id=loginUsername placeholder="username">
+    <input id=loginPassword type=password placeholder="password">
+    <button id=loginSubmit onclick="login()">Login</button>
+    <br />
+    <textarea id=loginResponse cols="40" rows="5" placeholder="request response"></textarea>
+  </div>
+</body>
+
+</html>
+
+
+<script>
+  function create() {
+    var username = document.querySelector("#createUsername").value
+    var password = document.querySelector("#createPassword").value
+    var resp = document.querySelector("#createResponse")
+
+    fetch("http://localhost:5000/auth/register", {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'username': username,
+        'password': password
+      })
+    }).then(response => response.json())
+      .then(data => {
+        resp.innerHTML = ""
+        resp.innerHTML += JSON.stringify(data)
+      })
+  }
+
+  function login() {
+    var username = document.querySelector("#loginUsername").value
+    var password = document.querySelector("#loginPassword").value
+    var resp = document.querySelector("#loginResponse")
+
+    fetch("http://localhost:5000/auth/login", {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'username': username,
+        'password': password
+      })
+    }).then(response => response.json())
+      .then(data => {
+        resp.innerHTML = ""
+        resp.innerHTML += JSON.stringify(data)
+      })
+  }
+</script>

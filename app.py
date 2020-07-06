@@ -3,6 +3,9 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from resources.auth import Register, Login
 from resources.files import File, List
+from resources.user import User
+from resources.friend import Friend
+from resources.pending_friend import PendingFriend
 from models import db
 from cryptography.fernet import Fernet
 import os
@@ -25,6 +28,9 @@ api.add_resource(Register, '/auth/register')
 api.add_resource(Login, '/auth/login')
 api.add_resource(File, '/file')
 api.add_resource(List, '/list')
+api.add_resource(User, '/user/<username>')
+api.add_resource(Friend, '/friend')
+api.add_resource(PendingFriend, '/pending_friend')
 
 # Static config
 blueprint = Blueprint('site', __name__, static_folder='files')

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    Upload
+    <br />
+    <input id=file type=file name=file>
+    <button value=Upload onclick=upload()>Upload</button>
+    <br />
+    <textarea id=response placeholder="request response"></textarea>
+  </div>
+</body>
+
+</html>
+
+<script>
+  function upload() {
+    var input = document.querySelector('#file')
+    var resp = document.querySelector('#response')
+    let formData = new FormData();
+    formData.append('file', input.files[0])
+    console.log(formData.get('file'))
+    fetch('http://localhost:5000/file', {
+      method: 'POST',
+      headers: {
+        // token valide for user "username_test"
+        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.WFEJuxsuHTKq9WR6VAA25oawXuILNt5k6eMLYWo9zvs',
+        // DO NOT SET CONTENT TYPE
+      },
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        resp.innerHTML = ""
+        resp.innerHTML += JSON.stringify(data)
+      })
+  }
+</script>

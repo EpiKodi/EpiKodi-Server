@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Vue JS dev script -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <div>
+      token : {{token}}
+      <br />
+      <button @click="modifyToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.WFEJuxsuHTKq9WR6VAA25oawXuILNt5k6eMLYWo9zvs')">username_test token</button>
+      <br />
+      <button @click="modifyToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.vZ_w2YTH9iFyRT3f1cNWFS2qRqI_qXwgtV_ltvMtc4M')">username_test2 token</button>
+      <br />
+      <button @click="modifyToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.Yl8J_4stMUxl2YLjIPbO9MSgM8S9O9MfsUX-iZM6Cws')">username_test3 token</button>
+      <br />
+      <button @click="modifyToken('')">No token</button>
+    </div>
+    <br />
+    <div>
+      Search User
+      <br />
+      <input id=searchUsername placeholder="username">
+      <button @click="search">Search</button>
+      <br />
+      <textarea id=searchResponse placeholder="request response"></textarea>
+    </div>
+    <br />
+    <div>
+      List friends
+      <br />
+      <button @click="list">List</button>
+      <br />
+      <textarea id=listResponse placeholder="request response"></textarea>
+    </div>
+    <br />
+    <div>
+      Add Friend
+      <br />
+      <input id=addFriendID placeholder="Friend ID">
+      <button @click="addFriend">Add Friend</button>
+      <br />
+      <textarea id=addFriendResponse placeholder="request response"></textarea>
+    </div>
+
+    <br />
+    <div>
+      List Pending Friend Requests
+      <br />
+      <button @click="listPending">List Pending</button>
+      <br />
+      <textarea id=listPendingResponse placeholder="request response"></textarea>
+    </div>
+
+
+    <br />
+    <div>
+      Accept Pending Friend Request
+      <br />
+      <input id=acceptPendingID placeholder="Friend ID">
+      <button @click="acceptPending">Add Friend</button>
+      <br />
+      <textarea id=acceptPendingResponse placeholder="request response"></textarea>
+    </div>
+  </div>
+</body>
+
+</html>
+
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: {
+      token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.WFEJuxsuHTKq9WR6VAA25oawXuILNt5k6eMLYWo9zvs"
+    },
+    methods: {
+      modifyToken(t) {
+        this.token = t
+      },
+      search() {
+        var username = document.querySelector("#searchUsername").value
+        var resp = document.querySelector("#searchResponse")
+        fetch("http://localhost:5000/user/" + username, {
+          headers: {
+            "Authorization": this.token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
+          })
+      },
+      list() {
+        var resp = document.querySelector("#listResponse")
+        fetch("http://localhost:5000/friend", {
+          headers: {
+            "Authorization": this.token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
+          })
+      },
+      addFriend() {
+        var id = document.querySelector("#addFriendID").value
+        var resp = document.querySelector("#addFriendResponse")
+        fetch("http://localhost:5000/friend", {
+          method: 'post',
+          headers: {
+            "Authorization": this.token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            id: id
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
+          })
+      },
+      listPending() {
+        var resp = document.querySelector("#listPendingResponse")
+        fetch("http://localhost:5000/pending_friend", {
+          headers: {
+            "Authorization": this.token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
+          })
+      },
+      acceptPending() {
+        var id = document.querySelector("#acceptPendingID").value
+        var resp = document.querySelector("#acceptPendingResponse")
+        fetch("http://localhost:5000/pending_friend", {
+          method: 'post',
+          headers: {
+            "Authorization": this.token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "id": id
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
+          })
+      }
+    }
+  })
+</script>

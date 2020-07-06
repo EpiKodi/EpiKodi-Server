@@ -6,8 +6,7 @@ import os
 
 user_fields = {
     'id': fields.Integer,
-    'username': fields.String,
-    'password': fields.String
+    'username': fields.String
 }
 
 
