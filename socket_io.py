@@ -12,3 +12,6 @@ class Socket(Namespace):
 
     def on_message(self, data):
         emit('message', data, room=data['room'])
+
+    def on_left(self, data):
+        leave_room(data['room'])
