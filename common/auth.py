@@ -14,7 +14,7 @@ def authenticate(function):
             abort(401)
         token = request.headers['Authorization'].split(',')[0]
         try:
-            jwt_token = jwt.decode(token, os.environ['SECRET'], algorithms=['HS256'])
+            jwt_token = jwt.decode(token, os.environ['JWT_SECRET'], algorithms=['HS256'])
         except:
             abort(401)
         user = User.query.filter_by(id=jwt_token['id']).first()
