@@ -11,6 +11,7 @@ from models import db
 from socket_io import Socket
 from cryptography.fernet import Fernet
 import os
+import eventlet
 
 # Flask config
 app = Flask(__name__)
@@ -22,6 +23,7 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 socketio = SocketIO(app, manage_session=False, cors_allowed_origins="*") # need to modify cors to allow only heroku or localhost
 socketio.on_namespace(Socket('/')) # Register class Socket
+eventlet.monkey_patch() # monkey patch ???
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
