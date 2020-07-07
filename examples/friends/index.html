@@ -35,7 +35,7 @@
     <div>
       List friends
       <br />
-      <button @click="list">List</button>
+      <button @click="listFriend">List</button>
       <br />
       <textarea id=listResponse placeholder="request response"></textarea>
     </div>
@@ -47,6 +47,16 @@
       <button @click="addFriend">Add Friend</button>
       <br />
       <textarea id=addFriendResponse placeholder="request response"></textarea>
+    </div>
+
+    <br />
+    <div>
+      Remove Friend
+      <br />
+      <input id=removeFriendID placeholder="Friend ID">
+      <button @click="removeFriend">Remove Friend</button>
+      <br />
+      <textarea id=removeFriendResponse placeholder="request response"></textarea>
     </div>
 
     <br />
@@ -67,6 +77,16 @@
       <button @click="acceptPending">Add Friend</button>
       <br />
       <textarea id=acceptPendingResponse placeholder="request response"></textarea>
+    </div>
+
+    <br />
+    <div>
+      Refuse Pending Friend Request
+      <br />
+      <input id=refusePendingID placeholder="Friend ID">
+      <button @click="refusePending">Remove Friend</button>
+      <br />
+      <textarea id=refusePendingResponse placeholder="request response"></textarea>
     </div>
   </div>
 </body>
@@ -97,7 +117,7 @@
             resp.innerHTML += JSON.stringify(data)
           })
       },
-      list() {
+      listFriend() {
         var resp = document.querySelector("#listResponse")
         fetch("http://localhost:5000/friend", {
           headers: {
@@ -113,15 +133,26 @@
       addFriend() {
         var id = document.querySelector("#addFriendID").value
         var resp = document.querySelector("#addFriendResponse")
-        fetch("http://localhost:5000/friend", {
+        fetch("http://localhost:5000/friend/" + id, {
           method: 'post',
           headers: {
-            "Authorization": this.token,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            id: id
+            "Authorization": this.token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
           })
+      },
+      removeFriend() {
+        var id = document.querySelector("#removeFriendID").value
+        var resp = document.querySelector("#removeFriendResponse")
+        fetch("http://localhost:5000/friend/" + id, {
+          method: 'delete',
+          headers: {
+            "Authorization": this.token
+          }
         })
           .then(response => response.json())
           .then(data => {
@@ -145,15 +176,26 @@
       acceptPending() {
         var id = document.querySelector("#acceptPendingID").value
         var resp = document.querySelector("#acceptPendingResponse")
-        fetch("http://localhost:5000/pending_friend", {
+        fetch("http://localhost:5000/pending_friend/" + id, {
           method: 'post',
           headers: {
-            "Authorization": this.token,
-            "Content-Type": "application/json"
+            "Authorization": this.token
           },
-          body: JSON.stringify({
-            "id": id
+        })
+          .then(response => response.json())
+          .then(data => {
+            resp.innerHTML = ""
+            resp.innerHTML += JSON.stringify(data)
           })
+      },
+      refusePending() {
+        var id = document.querySelector("#refusePendingID").value
+        var resp = document.querySelector("#refusePendingResponse")
+        fetch("http://localhost:5000/pending_friend/" + id, {
+          method: 'delete',
+          headers: {
+            "Authorization": this.token
+          }
         })
           .then(response => response.json())
           .then(data => {

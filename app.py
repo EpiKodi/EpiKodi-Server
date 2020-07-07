@@ -28,9 +28,9 @@ api.add_resource(Register, '/auth/register')
 api.add_resource(Login, '/auth/login')
 api.add_resource(File, '/file')
 api.add_resource(List, '/list')
-api.add_resource(User, '/user/<username>')
-api.add_resource(Friend, '/friend')
-api.add_resource(PendingFriend, '/pending_friend')
+api.add_resource(User, '/user/<string:username>')
+api.add_resource(Friend, '/friend/<int:id>', '/friend')
+api.add_resource(PendingFriend, '/pending_friend/<int:id>', '/pending_friend')
 
 # Static config
 blueprint = Blueprint('site', __name__, static_folder='files')
