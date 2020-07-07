@@ -9,3 +9,4 @@ Psycopg2
 gunicorn
 cryptography
 PyJWT
+eventlet

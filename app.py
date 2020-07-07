@@ -20,7 +20,7 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 
 # SocketIO config
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-socketio = SocketIO(app, engineio_logger=False, cors_allowed_origins="*")  # need to modify cors to allow only heroku or localhost
+socketio = SocketIO(app, engineio_logger=False, cors_allowed_origins="*") # need to modify cors to allow only heroku or localhost
 socketio.on_namespace(Socket('/')) # Register class Socket
 
 # Database config
