@@ -29,14 +29,16 @@
   function connect() {
     const id = document.querySelector("#room").value
     // Using flask server ! not the express server
-    socket = io('http://localhost:5000/');
+    socket = io('https://epi-kodi.herokuapp.com/');
+    // socket = io('http://localhost:5000')
+    // socket = io('https://flask-socket-io-test.herokuapp.com/')
     socket.emit('join', {
       room: id
     })
     socket.on('message', (data) => {
       const chat = document.querySelector("#chat")
       chat.innerHTML += data.message
-      chat.innerHTML += '<br/>'
+      chat.innerHTML += '<br />'
     })
   }
   function sendMessage() {
