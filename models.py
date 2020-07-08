@@ -31,5 +31,15 @@ class User(db.Model):
                                       primaryjoin=pending_friend_table.c.user_id_1 == id,
                                       secondaryjoin=pending_friend_table.c.user_id_2 == id)
 
+    files = db.relationship('File')
+
     def __repr__(self):
         return '<User %r>' % self.username
+
+class File(db.Model):
+    """Model for the Files table"""
+    __tablename__ = 'files'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    path = db.Column(db.String(80), nullable=False)

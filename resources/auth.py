@@ -30,6 +30,7 @@ class Register(Resource):
         if User.query.filter_by(username=args['username']).count():
             return {'message': 'user already exist'}, 401
         user = User(username=args['username'], password=encode(args['password']))
+        # need to prevent commit user with a '-' in his username
         db.session.add(user)
         db.session.commit()
         return marshal(user, user_fields)
@@ -57,5 +58,5 @@ class Login(Resource):
             return {'message': 'wrong username / password combinaison'}, 400
         if decode(user.password) != args['password']:
             return {'message': 'wrong username / password combinaison'}, 400
-        encoded = jwt.encode({'id': user.id}, os.environ['SECRET'], algorithm='HS256')
+        encoded = jwt.encode({'id': user.id}, os.environ['JWT_SECRET'], algorithm='HS256')
         return {'token': encoded.decode('utf-8')}

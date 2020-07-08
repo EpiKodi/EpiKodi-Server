@@ -12,8 +12,8 @@
   <br />
   <input id="room" placeholder="Room id">
   <button onclick="connect()">Connect to room</button>
-  <br/>
-  <br/>
+  <br />
+  <br />
   <input id="message" placeholder="Message">
   <button onclick="sendMessage()">Send Message</button>
   <div id="chat">
@@ -29,8 +29,8 @@
   function connect() {
     const id = document.querySelector("#room").value
     // Using flask server ! not the express server
-    socket = io('https://epi-kodi.herokuapp.com/');
-    // socket = io('http://localhost:5000')
+    // socket = io('https://epi-kodi.herokuapp.com/');
+    socket = io('http://localhost:5000')
     // socket = io('https://flask-socket-io-test.herokuapp.com/')
     socket.emit('join', {
       room: id
