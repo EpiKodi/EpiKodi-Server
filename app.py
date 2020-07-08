@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()  # monkey patch ???
 import os
 from cryptography.fernet import Fernet
 from socket_io import Socket
@@ -11,8 +13,6 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_restful import Resource, Api
 from flask import Flask, Blueprint
-import eventlet
-eventlet.monkey_patch()  # monkey patch ???
 
 # Flask config
 app = Flask(__name__)
@@ -22,8 +22,8 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 
 # SocketIO config
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-# socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*")
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*")
 socketio.on_namespace(Socket('/'))  # Register class Socket
 
 # Database config
