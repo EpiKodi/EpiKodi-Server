@@ -1,5 +1,3 @@
-import eventlet
-eventlet.monkey_patch()  # monkey patch ???
 import os
 from cryptography.fernet import Fernet
 from socket_io import Socket
