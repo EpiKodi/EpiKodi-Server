@@ -1,17 +1,18 @@
-from flask import Flask, Blueprint
-from flask_restful import Resource, Api
-from flask_cors import CORS
-from flask_socketio import SocketIO
-from resources.auth import Register, Login
-from resources.files import File, List
-from resources.user import User
-from resources.friend import Friend
-from resources.pending_friend import PendingFriend
-from models import db
-from socket_io import Socket
-from cryptography.fernet import Fernet
 import os
+from cryptography.fernet import Fernet
+from socket_io import Socket
+from models import db
+from resources.pending_friend import PendingFriend
+from resources.friend import Friend
+from resources.user import User
+from resources.files import File, List
+from resources.auth import Register, Login
+from flask_socketio import SocketIO
+from flask_cors import CORS
+from flask_restful import Resource, Api
+from flask import Flask, Blueprint
 import eventlet
+eventlet.monkey_patch()  # monkey patch ???
 
 # Flask config
 app = Flask(__name__)
@@ -23,8 +24,7 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 # socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*")
 socketio = SocketIO(app, cors_allowed_origins="*")
-socketio.on_namespace(Socket('/')) # Register class Socket
-# eventlet.monkey_patch() # monkey patch ???
+socketio.on_namespace(Socket('/'))  # Register class Socket
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
