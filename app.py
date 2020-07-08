@@ -21,7 +21,8 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 
 # SocketIO config
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*") # need to modify cors to allow only heroku or localhost
+socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 socketio.on_namespace(Socket('/')) # Register class Socket
 eventlet.monkey_patch() # monkey patch ???
 

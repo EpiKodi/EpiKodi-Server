@@ -1,2 +1,2 @@
-web: gunicorn --worker-class eventlet app:app
+web: gunicorn --worker-class socketio.sgunicorn.GeventSocketIOWorker app:app
 release: python manage.py db upgrade
