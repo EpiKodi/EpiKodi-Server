@@ -21,9 +21,9 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 
 # SocketIO config
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-socketio = SocketIO(message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*") # need to modify cors to allow only heroku or localhost
+socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*") # need to modify cors to allow only heroku or localhost
 socketio.on_namespace(Socket('/')) # Register class Socket
-# eventlet.monkey_patch() # monkey patch ???
+eventlet.monkey_patch() # monkey patch ???
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -46,4 +46,4 @@ blueprint = Blueprint('site', __name__, static_folder='files')
 app.register_blueprint(blueprint)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    socketio.run(app, host="0.0.0.0")
