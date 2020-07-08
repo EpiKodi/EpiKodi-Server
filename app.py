@@ -20,8 +20,7 @@ app.config['UPLOAD_FOLDER'] = os.path.dirname(os.path.abspath(__file__)) + '/fil
 
 # SocketIO config
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*")
-# socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 socketio.on_namespace(Socket('/'))  # Register class Socket
 
 # Database config
