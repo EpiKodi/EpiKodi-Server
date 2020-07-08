@@ -24,7 +24,7 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 socketio = SocketIO(app, message_queue=os.environ['REDIS_URL'], cors_allowed_origins="*")
 socketio = SocketIO(app, cors_allowed_origins="*")
 socketio.on_namespace(Socket('/')) # Register class Socket
-eventlet.monkey_patch() # monkey patch ???
+# eventlet.monkey_patch() # monkey patch ???
 
 # Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
