@@ -10,7 +10,7 @@ from resources.auth import Register, Login
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_restful import Resource, Api
-from flask import Flask, Blueprint, render_template
+from flask import Flask, Blueprint
 
 # Flask config
 app = Flask(__name__)
@@ -42,11 +42,6 @@ api.add_resource(PendingFriend, '/pending_friend/<int:id>', '/pending_friend')
 # Static config
 blueprint = Blueprint('site', __name__, static_folder='files')
 app.register_blueprint(blueprint)
-
-# TEST
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")
