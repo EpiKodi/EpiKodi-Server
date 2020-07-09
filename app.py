@@ -43,5 +43,10 @@ api.add_resource(PendingFriend, '/pending_friend/<int:id>', '/pending_friend')
 blueprint = Blueprint('site', __name__, static_folder='files')
 app.register_blueprint(blueprint)
 
+# TEST
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")
