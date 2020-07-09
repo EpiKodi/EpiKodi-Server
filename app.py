@@ -10,7 +10,7 @@ from resources.auth import Register, Login
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_restful import Resource, Api
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, render_template
 
 # Flask config
 app = Flask(__name__)
