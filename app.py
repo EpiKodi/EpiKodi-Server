@@ -5,7 +5,7 @@ from models import db
 from resources.pending_friend import PendingFriend
 from resources.friend import Friend
 from resources.user import User
-from resources.files import File, Download
+from resources.files import File, FileManager
 from resources.auth import Register, Login
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -34,7 +34,7 @@ api.init_app(app)
 api.add_resource(Register, '/auth/register')
 api.add_resource(Login, '/auth/login')
 api.add_resource(File, '/file')
-api.add_resource(Download, '/file/<string:filename>')
+api.add_resource(FileManager, '/file/<string:filename>')
 api.add_resource(User, '/user/<string:username>')
 api.add_resource(Friend, '/friend/<int:id>', '/friend')
 api.add_resource(PendingFriend, '/pending_friend/<int:id>', '/pending_friend')
