@@ -1,8 +1,9 @@
+import sys
 import glob
-from flask import request
+from flask import request, send_file
 from flask_restful import Resource, reqparse, fields, marshal
 from werkzeug.utils import secure_filename
-from common.auth import authenticate
+from common.auth import authenticate, get_user
 from models import db
 from models import File as F
 import os
@@ -16,11 +17,13 @@ def allowed_file(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-import sys
-
 file_fields = {
-    'path': fields.String
+    'id': fields.String,
+    'filename': fields.String,
+    'user': fields.String,
+    'extension': fields.String
 }
+
 
 class File(Resource):
     # Protected endpoint
@@ -35,13 +38,16 @@ class File(Resource):
             return {'message', 'file is empty'}, 400
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
-        filename =  user.username + '-' + secure_filename(file.filename)
+        filename = secure_filename(user.username + '-' + file.filename)
 
         # Saving file into files/ folder
         file.save(SAVE_DIR + filename)
 
         # Create object File
-        new_file = F(user_id=user.id, path=filename)
+        index = filename.rindex('.')
+        file_id = filename[:index]
+        extension = filename[index + 1:]
+        new_file = F(id=file_id, user_id=user.id, filename=secure_filename(file.filename), user=user.username, extension=extension)
 
         # Commit object in database
         db.session.add(new_file)
@@ -56,6 +62,47 @@ class File(Resource):
         return marshal(all_files, file_fields)
 
 
-class List(Resource):
-    def get(self):
-        return {'files': glob.glob(SAVE_DIR + '*')}
+class FileManager(Resource):
+    # Protected endpoint for delete method
+    method_decorators = {'delete': [authenticate]}
+
+    def get(self, filename):
+        token = request.args.get('token')
+        user = get_user(token)
+
+        # Check if the user can access to the file
+        all_files = user.files
+        for i in user.friends:
+            all_files += i.files
+        all_id = []
+        for i in all_files:
+            all_id.append(i.id)
+        if filename not in all_id:
+            return {'message': 'You don\'t have access to the required file'}, 401
+
+        # Get file object from filename
+        f = None
+        for i in all_files:
+            if i.id == filename:
+                f = i
+
+        # Return file data
+        print(SAVE_DIR + f.user + '-' + f.filename, file=sys.stderr)
+        filename = SAVE_DIR + f.user + '-' + f.filename
+        return send_file(filename, mimetype=f.extension)
+
+    def delete(self, user, filename):
+        # Get File object
+        f = None
+        for i in user.files:
+            if i.id == filename:
+                f = i
+        
+        # Error handler
+        if f is None:
+            return {'message': 'file not found'}, 400
+
+        # Remove and commit changes
+        db.session.delete(f)
+        db.session.commit()
+        return {}
