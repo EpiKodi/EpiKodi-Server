@@ -1,3 +1,4 @@
+import sys
 import glob
 from flask import request
 from flask_restful import Resource, reqparse, fields, marshal
@@ -16,11 +17,10 @@ def allowed_file(filename: str) -> bool:
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-import sys
-
 file_fields = {
     'path': fields.String
 }
+
 
 class File(Resource):
     # Protected endpoint
@@ -35,7 +35,7 @@ class File(Resource):
             return {'message', 'file is empty'}, 400
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
-        filename =  user.username + '-' + secure_filename(file.filename)
+        filename = secure_filename(user.username + '-' + file.filename)
 
         # Saving file into files/ folder
         file.save(SAVE_DIR + filename)
@@ -56,6 +56,10 @@ class File(Resource):
         return marshal(all_files, file_fields)
 
 
-class List(Resource):
-    def get(self):
-        return {'files': glob.glob(SAVE_DIR + '*')}
+class Download(Resource):
+    # Protected endpoint
+    method_decorators = [authenticate]
+
+    def get(self, user, filename):
+        print(filename, file=sys.stderr)
+        return {'files': filename}

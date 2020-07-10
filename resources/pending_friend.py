@@ -16,7 +16,6 @@ class PendingFriend(Resource):
     # Protecred endpoint
     method_decorators = [authenticate, prevent_missing_id]
 
-
     # Get all pending friend requests
     def get(self, user, **kwargs):
         return marshal(user.pending_friends, user_fields)
@@ -44,6 +43,7 @@ class PendingFriend(Resource):
         db.session.commit()
         return {}
 
+    # Refuse a pending friend request
     def delete(self, id, user):
         if id is None:
             return {'message': 'missing slug parameter'}
