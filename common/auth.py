@@ -18,7 +18,7 @@ def authenticate(function):
             jwt_token = jwt.decode(token, os.environ['JWT_SECRET'], algorithms=['HS256'])
         except:
             abort(401)
-        user = User.query.filter_by(id=jwt_token['id']).first()
+        user = User.query.filter_by(id=str(jwt_token['id'])).first()
         if user is None:
             abort(401)
         kwargs['user'] = user

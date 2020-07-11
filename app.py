@@ -39,7 +39,7 @@ api.add_resource(FileManager, '/file/<string:filename>')
 api.add_resource(User, '/user/<string:username>')
 api.add_resource(Friend, '/friend/<string:id>', '/friend')
 api.add_resource(PendingFriend, '/pending_friend/<string:id>', '/pending_friend')
-api.add_resource(Stream, '/stream')
+api.add_resource(Stream, '/stream/<string:id>', '/stream')
 
 # Static config
 blueprint = Blueprint('site', __name__, static_folder='files')
