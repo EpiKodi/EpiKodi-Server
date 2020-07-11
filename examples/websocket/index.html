@@ -10,15 +10,14 @@
 <body>
   Websocket example
   <br />
-  <input id="room" placeholder="Room id">
-  <button onclick="connect()">Connect to room</button>
+  <button onclick="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.WFEJuxsuHTKq9WR6VAA25oawXuILNt5k6eMLYWo9zvs')">Connect as username_test</button>
+  <br />
+  <button onclick="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.vZ_w2YTH9iFyRT3f1cNWFS2qRqI_qXwgtV_ltvMtc4M')">Connect as username_test2</button>
+  <br />
+  <button onclick="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.Yl8J_4stMUxl2YLjIPbO9MSgM8S9O9MfsUX-iZM6Cws')">Connect as username_test3</button>
   <br />
   <br />
-  <input id="message" placeholder="Message">
-  <button onclick="sendMessage()">Send Message</button>
-  <div id="chat">
-
-  </div>
+  <button onclick="startStream()">start stream</button>
 </body>
 
 </html>
@@ -26,27 +25,27 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket;
-  function connect() {
-    const id = document.querySelector("#room").value
-    // Using flask server ! not the express server
-    // socket = io('https://epi-kodi.herokuapp.com/');
+  var _token = null
+  function connect(token) {
+    _token = token
     socket = io('http://localhost:5000')
-    // socket = io('https://flask-socket-io-test.herokuapp.com/')
     socket.emit('join', {
-      room: id
+      token: token
     })
-    socket.on('message', (data) => {
-      const chat = document.querySelector("#chat")
-      chat.innerHTML += data.message
-      chat.innerHTML += '<br />'
+    socket.on('stream', (data) => {
+      console.log("stream data !")
+      console.log(data)
     })
   }
-  function sendMessage() {
-    const message = document.querySelector("#message").value
-    const id = document.querySelector("#room").value
-    socket.emit('message', {
-      room: id,
-      message: message
+  function startStream() {
+    fetch('http://localhost:5000/stream', {
+      headers: {
+        "Authorization": _token
+      }
     })
+      .then(response => response.json())
+      .then(data => {
+        console.log("start stream data")
+      })
   }
 </script>

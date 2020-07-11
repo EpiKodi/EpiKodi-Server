@@ -7,6 +7,7 @@ from resources.friend import Friend
 from resources.user import User
 from resources.files import File, FileManager
 from resources.auth import Register, Login
+from resources.stream import Stream
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_restful import Resource, Api
@@ -38,6 +39,7 @@ api.add_resource(FileManager, '/file/<string:filename>')
 api.add_resource(User, '/user/<string:username>')
 api.add_resource(Friend, '/friend/<int:id>', '/friend')
 api.add_resource(PendingFriend, '/pending_friend/<int:id>', '/pending_friend')
+api.add_resource(Stream, '/stream')
 
 # Static config
 blueprint = Blueprint('site', __name__, static_folder='files')
