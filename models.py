@@ -4,13 +4,13 @@ db = SQLAlchemy()
 
 
 friend_table = db.Table('friends',
-                        db.Column('user_id_1', db.Integer, db.ForeignKey('users.id')),
-                        db.Column('user_id_2', db.Integer, db.ForeignKey('users.id'))
+                        db.Column('user_id_1', db.Text, db.ForeignKey('users.id')),
+                        db.Column('user_id_2', db.Text, db.ForeignKey('users.id'))
                         )
 
 pending_friend_table = db.Table('pending_friends',
-                                db.Column('user_id_1', db.Integer, db.ForeignKey('users.id')),
-                                db.Column('user_id_2', db.Integer, db.ForeignKey('users.id'))
+                                db.Column('user_id_1', db.Text, db.ForeignKey('users.id')),
+                                db.Column('user_id_2', db.Text, db.ForeignKey('users.id'))
                                 )
 
 
@@ -18,7 +18,7 @@ class User(db.Model):
     """Model for the User table"""
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Text, primary_key=True)
     username = db.Column(db.Text, unique=True, nullable=False)
     password = db.Column(db.Text, nullable=False)
     friends = db.relationship('User',
@@ -32,16 +32,18 @@ class User(db.Model):
                                       secondaryjoin=pending_friend_table.c.user_id_2 == id)
 
     files = db.relationship('File')
+    stream = db.relationship('File', uselist=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
+
 
 class File(db.Model):
     """Model for the Files table"""
     __tablename__ = 'files'
 
     id = db.Column(db.Text, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Text, db.ForeignKey('users.id'))
     filename = db.Column(db.Text, nullable=False)
     user = db.Column(db.Text, nullable=False)
     extension = db.Column(db.String(20), nullable=False)

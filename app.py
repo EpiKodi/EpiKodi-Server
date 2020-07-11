@@ -37,8 +37,8 @@ api.add_resource(Login, '/auth/login')
 api.add_resource(File, '/file')
 api.add_resource(FileManager, '/file/<string:filename>')
 api.add_resource(User, '/user/<string:username>')
-api.add_resource(Friend, '/friend/<int:id>', '/friend')
-api.add_resource(PendingFriend, '/pending_friend/<int:id>', '/pending_friend')
+api.add_resource(Friend, '/friend/<string:id>', '/friend')
+api.add_resource(PendingFriend, '/pending_friend/<string:id>', '/pending_friend')
 api.add_resource(Stream, '/stream')
 
 # Static config

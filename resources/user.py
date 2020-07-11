@@ -5,7 +5,7 @@ from models import User as U
 import sys
 
 user_fields = {
-    'id': fields.Integer,
+    'id': fields.String,
     'username': fields.String
 }
 
