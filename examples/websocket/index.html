@@ -3,49 +3,151 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 
 <body>
-  Websocket example
-  <br />
-  <button onclick="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.WFEJuxsuHTKq9WR6VAA25oawXuILNt5k6eMLYWo9zvs')">Connect as username_test</button>
-  <br />
-  <button onclick="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mn0.vZ_w2YTH9iFyRT3f1cNWFS2qRqI_qXwgtV_ltvMtc4M')">Connect as username_test2</button>
-  <br />
-  <button onclick="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.Yl8J_4stMUxl2YLjIPbO9MSgM8S9O9MfsUX-iZM6Cws')">Connect as username_test3</button>
-  <br />
-  <br />
-  <button onclick="startStream()">start stream</button>
+  <div id=app>
+    <v-app>
+      <v-main>
+        <v-container>
+          <v-snackbar top right rounded shaped v-model="notification" timeout=3000>
+            {{notification_text}}
+          </v-snackbar>
+          <h2>Websocket example</h2>
+          <br />
+          <v-btn @click="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Ijg3MzA0Yzc2Y2NiNTRjNjQ4YjFkM2YzZjIyZWFiY2I0In0.1Xh7Bg6PBg3wNYpk9Co-9-jFp-kbUXm2pcxsnfJob9w')">Connect as username_test</v-btn>
+          <br />
+          <v-btn @click="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjEzMGNiNzMxYzBiNzQ4YzFiYTJkNTdkNTQyYjFkNDM5In0.VpyswgvUYv-qMF4KzTf2L3frEYtxAI8pEeBvGx-isJE')">Connect as username_test2</v-btn>
+          <br />
+          <v-btn @click="connect('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjNkNjJkYzlkMjYzZTRkYjJiYTAxOGE2NzdlYjVhNWE0In0.Dd4nmupRSnmTKNwP6LWqYqLiUqb-3I08JkjR9wZYIHQ')">Connect as username_test3</v-btn>
+          <br />
+          <br />
+          <v-col cols="12" sm="6" md="3">
+            <v-text-field placeholder="File ID" outlined dense v-model=fileID></v-text-field>
+            <v-btn @click="startStream()">start stream</v-btn>
+            <v-btn @click="endStream()">end stream</v-btn>
+          </v-col>
+          <video id="video"></video>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
 </body>
 
 </html>
 
+<!-- Vue + Vuetify -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+<!-- SocketIO -->
 <script src="/socket.io/socket.io.js"></script>
+
 <script>
-  var socket;
-  var _token = null
-  function connect(token) {
-    _token = token
-    socket = io('http://localhost:5000')
-    socket.emit('join', {
-      token: token
-    })
-    socket.on('stream', (data) => {
-      console.log("stream data !")
-      console.log(data)
-    })
-  }
-  function startStream() {
-    fetch('http://localhost:5000/stream', {
-      headers: {
-        "Authorization": _token
+  new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+    data() {
+      return {
+        socket: null,
+        _token: null,
+        fileID: null,
+        notification: false,
+        notification_text: ""
       }
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log("start stream data")
-      })
-  }
+    },
+    methods: {
+      connect(token) {
+        this._token = token
+        this.socket = io('http://localhost:5000')
+        this.socket.emit('join', {
+          token: token
+        })
+        this.socket.on('stream', (data) => {
+          this.notification = true
+          this.notification_text = data.user + " is now streaming."
+
+          // DEBUG START VIDEO
+          const v = document.querySelector("#video")
+          v.src = "http://localhost:5000/file/" + data.id + "?token=" + this._token
+        })
+        this.socket.on('stream-end', (data) => {
+          this.notification = true
+          this.notification_text = data.user + " ended his stream."
+
+        
+          // DEBUG END VIDEO
+          const v = document.querySelector("#video")
+          v.src = ""
+        })
+        this.socket.on('media_update', (data) => {
+          const v = document.querySelector("#video")
+          v.currentTime = data.timer
+          if (data.play)
+            v.play()
+          else
+            v.pause()
+        })
+      },
+      mediaUpdate() {
+        const v = document.querySelector("#video")
+        const timer = v.currentTime
+        const play = !v.paused
+        this.socket.emit('media_update', {
+          token: this._token,
+          timer: timer,
+          play: play,
+          id: this.fileID
+        })
+      },
+      startStream() {
+        fetch('http://localhost:5000/stream/' + this.fileID, {
+          method: 'post',
+          headers: {
+            "Authorization": this._token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data)
+
+            // DEBUG START VIDEO
+            const v = document.querySelector("#video")
+            v.src = "http://localhost:5000/file/" + this.fileID + "?token=" + this._token
+            v.controls = "controls"
+
+            v.onplay = this.mediaUpdate
+            v.onpause = this.mediaUpdate
+          })
+          .catch(error => {
+            console.log("Error in POST /stream")
+          })
+      },
+      endStream() {
+        fetch('http://localhost:5000/stream', {
+          method: 'delete',
+          headers: {
+            "Authorization": this._token
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data)
+
+            // DEBUG END VIDEO
+            const v = document.querySelector("#video")
+            v.src = ""
+            v.controls = ""
+          })
+          .catch(error => {
+            console.log("Error in DELETE /stream")
+          })
+      }
+    }
+  })
 </script>
