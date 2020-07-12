@@ -5,6 +5,7 @@ from models import User as U
 from models import db
 from numbers import Number
 import sys
+import common.ws as ws
 
 user_fields = {
     'id': fields.String,
@@ -41,6 +42,9 @@ class PendingFriend(Resource):
         db.session.add(user)
         db.session.add(pending_friend)
         db.session.commit()
+
+        # WebSocket call
+        ws.emit_user(pending_friend, 'friend-accepted', {'user': user.username})
         return {}
 
     # Refuse a pending friend request
