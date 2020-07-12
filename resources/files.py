@@ -7,6 +7,8 @@ from common.auth import authenticate, get_user
 from models import db
 from models import File as F
 import os
+import uuid
+from pathlib import Path
 
 ALLOWED_EXTENSIONS = {'gif', 'png', 'jpg', 'jpeg', 'mp4', 'mp3'}
 FILE_DIR = "files/"
@@ -38,16 +40,18 @@ class File(Resource):
             return {'message', 'file is empty'}, 400
         if not allowed_file(file.filename):
             return {'message': 'file extension not allowed'}, 400
-        filename = secure_filename(user.username + '-' + file.filename)
+
+        # Create subdirectory if not exist
+        Path(SAVE_DIR + user.username).mkdir(parents=True, exist_ok=True)
 
         # Saving file into files/ folder
-        file.save(SAVE_DIR + filename)
+        filename = secure_filename(file.filename)
+        file.save(SAVE_DIR + user.username + '/' + filename)
 
         # Create object File
         index = filename.rindex('.')
-        file_id = filename[:index]
         extension = filename[index + 1:]
-        new_file = F(id=file_id, user_id=user.id, filename=secure_filename(file.filename), user=user.username, extension=extension)
+        new_file = F(id=uuid.uuid4().hex, user_id=user.id, filename=filename, user=user.username, extension=extension)
 
         # Commit object in database
         db.session.add(new_file)
@@ -87,8 +91,7 @@ class FileManager(Resource):
                 f = i
 
         # Return file data
-        print(SAVE_DIR + f.user + '-' + f.filename, file=sys.stderr)
-        filename = SAVE_DIR + f.user + '-' + f.filename
+        filename = SAVE_DIR + f.user + '/' + f.filename
         return send_file(filename, mimetype=f.extension)
 
     def delete(self, user, filename):

@@ -3,9 +3,10 @@ from models import User, db
 from common.crypto import encode, decode
 import jwt
 import os
+import uuid
 
 user_fields = {
-    'id': fields.Integer,
+    'id': fields.String,
     'username': fields.String
 }
 
@@ -29,7 +30,7 @@ class Register(Resource):
         args = self.post_parser.parse_args()
         if User.query.filter_by(username=args['username']).count():
             return {'message': 'user already exist'}, 401
-        user = User(username=args['username'], password=encode(args['password']))
+        user = User(id=uuid.uuid4().hex, username=args['username'], password=encode(args['password']))
         # need to prevent commit user with a '-' in his username
         db.session.add(user)
         db.session.commit()

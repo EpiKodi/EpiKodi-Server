@@ -7,7 +7,7 @@ from numbers import Number
 import sys
 
 user_fields = {
-    'id': fields.Integer,
+    'id': fields.String,
     'username': fields.String
 }
 
