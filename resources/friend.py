@@ -5,6 +5,7 @@ from models import User as U
 from models import db
 from numbers import Number
 import sys
+import common.ws as ws
 
 user_fields = {
     'id': fields.String,
@@ -37,6 +38,9 @@ class Friend(Resource):
         # Commit changes
         db.session.add(friend)
         db.session.commit()
+
+        # WebSocket call
+        ws.emit_user(friend, 'friend-request', {'user': user.username})
         return {}
 
     # Remove a friend
