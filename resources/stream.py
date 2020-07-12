@@ -44,13 +44,14 @@ class Stream(Resource):
         db.session.commit()
 
         # WebSocket call
-        ws.emit_friends(user, "stream", {"user": user.username})
+        ws.emit_friends(user, 'stream', {'user': user.username, 'id': id})
         return {}
 
     # End a stream
     def delete(self, user, **kwargs):
         if user.stream is None:
             return {'error': 'You are not streaming'}, 400
+        stream_id = user.stream.id
 
         # Remove stream
         user.stream = None
@@ -60,5 +61,5 @@ class Stream(Resource):
         db.session.commit()
 
         # WebSocket call
-        ws.emit_friends(user, "end-stream", {"user": user.username})
+        ws.emit_friends(user, 'stream-end', {'user': user.username, 'id': stream_id})
         return {}
