@@ -34,12 +34,12 @@ class File(Resource):
     # Upload
     def post(self, user):
         if 'file' not in request.files:
-            return {'message': 'Required field file'}, 400
+            return {'error': 'Required field file'}, 400
         file = request.files['file']
         if file.filename == '':
-            return {'message', 'file is empty'}, 400
+            return {'error', 'file is empty'}, 400
         if not allowed_file(file.filename):
-            return {'message': 'file extension not allowed'}, 400
+            return {'error': 'file extension not allowed'}, 400
 
         # Create subdirectory if not exist
         Path(SAVE_DIR + user.username).mkdir(parents=True, exist_ok=True)
@@ -82,7 +82,7 @@ class FileManager(Resource):
         for i in all_files:
             all_id.append(i.id)
         if filename not in all_id:
-            return {'message': 'You don\'t have access to the required file'}, 401
+            return {'error': 'You don\'t have access to the required file'}, 400
 
         # Get file object from filename
         f = None
@@ -103,7 +103,7 @@ class FileManager(Resource):
         
         # Error handler
         if f is None:
-            return {'message': 'file not found'}, 400
+            return {'error': 'file not found'}, 400
 
         # Remove and commit changes
         db.session.delete(f)

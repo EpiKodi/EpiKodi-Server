@@ -29,7 +29,7 @@ class Register(Resource):
     def post(self):
         args = self.post_parser.parse_args()
         if User.query.filter_by(username=args['username']).count():
-            return {'message': 'user already exist'}, 401
+            return {'message': 'user already exist'}, 400
         user = User(id=uuid.uuid4().hex, username=args['username'], password=encode(args['password']))
         # need to prevent commit user with a '-' in his username
         db.session.add(user)

@@ -24,13 +24,13 @@ class PendingFriend(Resource):
     # Validate a pending friend request
     def post(self, id, user):
         if id is None:
-            return {'message': 'missing slug parameter'}
+            return {'error': 'missing slug parameter'}, 400
         pending_friend = None
         for i in user.pending_friends:
             if i.id == id:
                 pending_friend = i
         if pending_friend is None:
-            return {'message': 'pending friend not found'}, 401
+            return {'error': 'pending friend not found'}, 400
         # Remove pending friend request
         user.pending_friends.remove(pending_friend)
 
@@ -50,13 +50,13 @@ class PendingFriend(Resource):
     # Refuse a pending friend request
     def delete(self, id, user):
         if id is None:
-            return {'message': 'missing slug parameter'}
+            return {'error': 'missing slug parameter'}, 400
         pending_friend = None
         for i in user.pending_friends:
             if i.id == id:
                 pending_friend = i
         if pending_friend is None:
-            return {'message': 'pending friend not found'}, 401
+            return {'error': 'pending friend not found'}, 400
         # Remove pending friend request
         user.pending_friends.remove(pending_friend)
 

@@ -31,10 +31,10 @@ class Stream(Resource):
     # Start a stream
     def post(self, id, user):
         if user.stream is not None:
-            return {'message': 'You are already streaming'}, 400
+            return {'error': 'You are already streaming'}, 400
         file = F.query.filter_by(id=id).first()
         if file is None:
-            return {'message': 'File not found'}, 400
+            return {'error': 'File not found'}, 400
 
         # Add stream
         user.stream = file
@@ -44,13 +44,13 @@ class Stream(Resource):
         db.session.commit()
 
         # WebSocket call
-        ws.emit_friends(user, "stream", {"user": user.username, "id": id})
+        ws.emit_friends(user, "stream", {"user": user.username})
         return {}
 
     # End a stream
-    def delete(self, id, user):
+    def delete(self, user, **kwargs):
         if user.stream is None:
-            return {'message': 'You are not streaming'}, 400
+            return {'error': 'You are not streaming'}, 400
 
         # Remove stream
         user.stream = None
@@ -60,5 +60,5 @@ class Stream(Resource):
         db.session.commit()
 
         # WebSocket call
-        ws.emit_friends(user, "end-stream", {"user": user.username, "id": id})
+        ws.emit_friends(user, "end-stream", {"user": user.username})
         return {}

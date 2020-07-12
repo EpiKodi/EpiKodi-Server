@@ -24,14 +24,14 @@ class Friend(Resource):
     # Create a pending friend request
     def post(self, id, user):
         if id is None:
-            return {'message': 'missing slug parameter'}
+            return {'error': 'missing slug parameter'}
         friend = U.query.filter_by(id=id).first()
         if friend is None:
-            return {'message': 'user not found'}, 401
+            return {'error': 'user not found'}, 400
         if friend is user:
-            return {'message': 'you cannot self-add'}, 401
+            return {'error': 'you cannot self-add'}, 400
         if friend in user.friends:
-            return {'message': 'you are already friend'}, 401
+            return {'error': 'you are already friend'}, 400
         # Add pending friend request
         friend.pending_friends.append(user)
 
@@ -46,13 +46,13 @@ class Friend(Resource):
     # Remove a friend
     def delete(self, id, user):
         if id is None:
-            return {'message': 'missing slug parameter'}
+            return {'error': 'missing slug parameter'}
         friend = None
         for i in user.friends:
             if i.id == id:
                 friend = i
         if friend is None:
-            return {'message': 'friend not found'}, 401
+            return {'error': 'friend not found'}, 400
         # Remove friend
         user.friends.remove(friend)
         friend.friends.remove(user)
