@@ -24,20 +24,21 @@ class Stream(Resource):
     def get(self, user, **kwargs):
         all_stream = []
         for friend in user.friends:
-            if friend.stream is not None:
-                all_stream.append(friend.stream)
+            if friend.stream_id is not None:
+                f = F.query.filter_by(id=friend.stream_id).first()
+                all_stream.append(f)
         return marshal(all_stream, file_fields)
 
     # Start a stream
     def post(self, id, user):
-        if user.stream is not None:
+        if user.stream_id is not None:
             return {'error': 'You are already streaming'}, 400
         file = F.query.filter_by(id=id).first()
         if file is None:
             return {'error': 'File not found'}, 400
 
         # Add stream
-        user.stream = file
+        user.stream_id = file.id
 
         # Commit changes
         db.session.add(user)
@@ -49,12 +50,12 @@ class Stream(Resource):
 
     # End a stream
     def delete(self, user, **kwargs):
-        if user.stream is None:
+        if user.stream_id is None:
             return {'error': 'You are not streaming'}, 400
-        stream_id = user.stream.id
+        stream_id = user.stream_id
 
         # Remove stream
-        user.stream = None
+        user.stream_id = None
 
         # Commit changes
         db.session.add(user)
