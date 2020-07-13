@@ -10,7 +10,7 @@ import os
 import uuid
 from pathlib import Path
 
-ALLOWED_EXTENSIONS = {'gif', 'png', 'jpg', 'jpeg', 'mp4', 'mp3'}
+ALLOWED_EXTENSIONS = {'gif', 'png', 'jpg', 'jpeg', 'mp4', 'mp3', 'webm'}
 FILE_DIR = "files/"
 SAVE_DIR = os.path.join(os.path.dirname(__file__) + '/../' + FILE_DIR)
 

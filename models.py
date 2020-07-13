@@ -32,7 +32,7 @@ class User(db.Model):
                                       secondaryjoin=pending_friend_table.c.user_id_2 == id)
 
     files = db.relationship('File')
-    stream = db.relationship('File', uselist=False)
+    stream_id = db.Column(db.Text)
 
     def __repr__(self):
         return '<User %r>' % self.username
