@@ -24,17 +24,12 @@ class Socket(Namespace):
         leave_room(user.username)
 
     def on_media_update(self, data):
-        print("media update")
         if data.get('token') is None:
             return
         try:
             user = get_user(data['token'])
         except:
             return
-        print("before emit friends")
-        print("timer :", data.get('timer'))
-        print("play : ", data.get('play'))
-        print("id : ", data.get('id'))
         ws.emit_friends(user, 'media_update',
                         {
                             'timer': data.get('timer'),
