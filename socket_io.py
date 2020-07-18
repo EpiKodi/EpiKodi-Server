@@ -6,12 +6,16 @@ import common.ws as ws
 
 class Socket(Namespace):
     def on_join(self, data):
+        print("JOINED !", file=sys.stderr)
+        print(data.get('token'), file=sys.stderr)
         if data.get('token') is None:
             return
         try:
             user = get_user(data['token'])
         except:
             return
+        print(user.username, file=sys.stderr)
+        print("JOIN SUCCESS")
         join_room(user.username)
 
     def on_left(self, data):
