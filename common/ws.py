@@ -7,8 +7,7 @@ def emit_friends(user, message: str, obj: object) -> None:
     print("gonna emit to all friends")
     for friend in user.friends:
         print("gonna emit to : ", friend.username)
-        # emit(message, obj, room=friend.username, namespace='/')
-        emit(message, obj, namespace='/')
+        emit(message, obj, room=friend.username, namespace='/')
 
 
 def emit_user(user, message: str, obj: object) -> None:
