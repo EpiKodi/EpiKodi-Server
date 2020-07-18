@@ -36,6 +36,8 @@ class Stream(Resource):
         file = F.query.filter_by(id=id).first()
         if file is None:
             return {'error': 'File not found'}, 400
+        if file.user != user.username:
+            return {'error': 'You don\'t own the file'}, 400
 
         # Add stream
         user.stream_id = file.id
