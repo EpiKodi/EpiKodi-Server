@@ -36,3 +36,14 @@ class Socket(Namespace):
                             'play': data.get('play'),
                             'id': data.get('id')
                         })
+
+    def on_new(self, data):
+        if data.get('token') is None:
+            return
+        try:
+            user = get_user(data['token'])
+        except:
+            return
+        ws.emit_friends(user, 'new', {
+            'id': data.get('id')
+        })
