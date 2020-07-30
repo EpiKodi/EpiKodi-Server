@@ -1,0 +1,1 @@
+heroku run bash --app epi-kodi
